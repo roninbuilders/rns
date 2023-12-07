@@ -25,9 +25,11 @@ export function createRequestOptions({ to, data }: { to: string; data: string })
 }
 
 export function hexToASCII(value: string) {
-  const hex = value.toString()
   let str = ''
-  for (let i = 0; i < hex.length; i += 2) str += String.fromCharCode(parseInt(hex.substring(i, i + 2), 16))
+  for (let i = 0; i < value.length; i += 2) {
+    const v = parseInt(value.substring(i,i + 2), 16)
+    if (v) str += String.fromCharCode(v)
+  }
   return str
 }
 
