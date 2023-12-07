@@ -25,5 +25,5 @@
     "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist", "types", "out", ".next", ".turbo"],
-  "include": ["global.d.ts", "src"]
+  "include": ["src"]
 }
