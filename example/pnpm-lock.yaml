@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@roninbuilders/rns':
-    specifier: ^0.0.1
-    version: 0.0.1(typescript@5.3.3)
+    specifier: ^0.0.2
+    version: 0.0.2(typescript@5.3.3)
 
 devDependencies:
   typescript:
@@ -313,8 +313,8 @@ packages:
     dev: true
     optional: true
 
-  /@roninbuilders/rns@0.0.1(typescript@5.3.3):
-    resolution: {integrity: sha512-aglER97nLquzk2v/F7KERZP6+iZwjZ0AYDh0xQZZDwrVBxTBiqGdFlncLmmXK/Rds1SHlRiWiqckCKUjNYXRmg==}
+  /@roninbuilders/rns@0.0.2(typescript@5.3.3):
+    resolution: {integrity: sha512-929hMyHjYIknTquq5VDyJPmrvZ3L3AymbyKcrFFQ1LJMCB/gfEQzT2jNmW36lQDoD4kGOowiMo0BRyRZkpTMTA==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
