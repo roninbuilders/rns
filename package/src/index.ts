@@ -1,7 +1,7 @@
 import { encodeParameters } from '@zoltu/ethereum-abi-encoder'
 import { ABI, ADDRESS, bufferToHex, createRequestOptions, hexToASCII } from './helpers'
 
-export async function getName(address: string, { path = 'rpc', apiKey }: { path?: string, apiKey?: string }) {
+export async function getName(address: string, { path = 'rpc', apiKey }: { path?: string, apiKey?: string } = {}) {
 	const BASE_URL = apiKey ? `https://api-gateway.skymavis.com/${path}?apikey=${apiKey}` : 'https://api.roninchain.com/rpc'
 
 	try {

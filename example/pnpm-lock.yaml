@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  '@roninbuilders/rns':
+    specifier: ^0.0.0
+    version: 0.0.0(typescript@5.3.3)
+
 devDependencies:
   typescript:
     specifier: ^5.2.2
@@ -308,6 +313,22 @@ packages:
     dev: true
     optional: true
 
+  /@roninbuilders/rns@0.0.0(typescript@5.3.3):
+    resolution: {integrity: sha512-cZ9yl5dxhbNYLXOZFfaVpcel/PlBg7hhnd+wDlYxpEeQkAGo6KokXgJN6zSyVVL74GevQx+PYIaIRC9sqmAsaw==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@zoltu/ethereum-abi-encoder': 5.0.4
+      typescript: 5.3.3
+    dev: false
+
+  /@zoltu/ethereum-abi-encoder@5.0.4:
+    resolution: {integrity: sha512-HS9QiyqPinn17YyzHK+HbobCcfEyL5uQ3u4E2V0t5GgkMorJKTDhmoFD8r/Ir2KFZMimgT5SRNEuhLZnDhM3MA==}
+    dev: false
+
   /esbuild@0.19.8:
     resolution: {integrity: sha512-l7iffQpT2OrZfH2rXIp7/FkmaeZM0vxbxN9KfiCwGYuZqzMg/JdvX26R31Zxn/Pxvsrg3Y9N6XTcnknqDyyv4w==}
     engines: {node: '>=12'}
@@ -394,7 +415,6 @@ packages:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
-    dev: true
 
   /vite@5.0.6:
     resolution: {integrity: sha512-MD3joyAEBtV7QZPl2JVVUai6zHms3YOmLR+BpMzLlX2Yzjfcc4gTgNi09d/Rua3F4EtC8zdwPU8eQYyib4vVMQ==}

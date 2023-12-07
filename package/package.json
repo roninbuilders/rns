@@ -1,6 +1,6 @@
 {
   "name": "@roninbuilders/rns",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Small package to interact with RNS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
   "author": "Glitch-txs",
   "license": "MIT",
   "dependencies": {
-    "@zoltu/ethereum-abi-encoder": "^5.0.4"
+    "@zoltu/ethereum-abi-encoder": "5.0.4"
   },
   "peerDependencies": {
     "typescript": ">=5"
