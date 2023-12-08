@@ -25,33 +25,31 @@ export function createRequestOptions({ to, data }: { to: string; data: string })
 }
 
 export function hexToASCII(value: string) {
-  let str = ''
-  for (let i = 0; i < value.length; i += 2) {
-    const v = parseInt(value.substring(i,i + 2), 16)
-    if (v) str += String.fromCharCode(v)
-  }
-  return str
+	let str = ''
+	for (let i = 0; i < value.length; i += 2) {
+		const v = parseInt(value.substring(i, i + 2), 16)
+		if (v) str += String.fromCharCode(v)
+	}
+	return str
 }
 
 export function bufferToHex(buffer: Uint8Array) {
-  return [...new Uint8Array(buffer)]
-    .map(x => x.toString(16).padStart(2, '0'))
-    .join('')
+	return [...new Uint8Array(buffer)].map((x) => x.toString(16).padStart(2, '0')).join('')
 }
 
-export function hexToUint8Array(hex: string){
-  const match = /^(?:0x)?([a-fA-F0-9]*)$/.exec(hex)
-  if(!match) throw new Error('Error while converting hex to Uint8Array - match is undefined')
-  const normalized = match[1]
-  if(!normalized) throw new Error('Error while converting hex to Uint8Array - normalized is undefined')
-  const bytes = []
-  for (let i = 0; i < normalized.length; i += 2) {
-    bytes.push(Number.parseInt(`${normalized[i]}${normalized[i + 1]}`, 16))
-  }
-  const result = new Uint8Array(bytes.length)
-  result.set(bytes, 0)
+export function hexToUint8Array(hex: string) {
+	const match = /^(?:0x)?([a-fA-F0-9]*)$/.exec(hex)
+	if (!match) throw new Error('Error while converting hex to Uint8Array - match is undefined')
+	const normalized = match[1]
+	if (!normalized) throw new Error('Error while converting hex to Uint8Array - normalized is undefined')
+	const bytes = []
+	for (let i = 0; i < normalized.length; i += 2) {
+		bytes.push(Number.parseInt(`${normalized[i]}${normalized[i + 1]}`, 16))
+	}
+	const result = new Uint8Array(bytes.length)
+	result.set(bytes, 0)
 
-  return result
+	return result
 }
 
 export const ABI = {
@@ -69,20 +67,20 @@ export const ABI = {
 		stateMutability: 'view',
 		type: 'function',
 	},
-  publicResolver_addr: {
-    inputs: [{ internalType: "bytes32", name: "node", type: "bytes32" }],
-    name: "addr",
-    outputs: [{ internalType: "address payable", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  RNSUnified_namehash: {
-    inputs: [{ internalType: "string", name: "str", type: "string" }],
-    name: "namehash",
-    outputs: [{ internalType: "bytes32", name: "hashed", type: "bytes32" }],
-    stateMutability: "pure",
-    type: "function",
-  }
+	publicResolver_addr: {
+		inputs: [{ internalType: 'bytes32', name: 'node', type: 'bytes32' }],
+		name: 'addr',
+		outputs: [{ internalType: 'address payable', name: '', type: 'address' }],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	RNSUnified_namehash: {
+		inputs: [{ internalType: 'string', name: 'str', type: 'string' }],
+		name: 'namehash',
+		outputs: [{ internalType: 'bytes32', name: 'hashed', type: 'bytes32' }],
+		stateMutability: 'pure',
+		type: 'function',
+	},
 }
 
 export const ADDRESS = {
@@ -90,4 +88,3 @@ export const ADDRESS = {
 	publicResolver: '0xadb077d236d9e81fb24b96ae9cb8089ab9942d48',
 	RNSUnified: '0x67c409dab0ee741a1b1be874bd1333234cfdbf44',
 }
-

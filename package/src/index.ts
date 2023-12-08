@@ -1,69 +1,83 @@
-import { decodeParameters, encodeParameters } from '@zoltu/ethereum-abi-encoder'
+import { ParameterDescription, decodeParameters, encodeParameters } from '@zoltu/ethereum-abi-encoder'
 import { ABI, ADDRESS, bufferToHex, createRequestOptions, hexToASCII, hexToUint8Array } from './helpers'
+
+async function contractCall({
+	hexFunction,
+	RPCUrl,
+	input,
+	ABIParams,
+	address,
+}: { hexFunction: string; RPCUrl: string; input: string; ABIParams: ParameterDescription[]; address: string }) {
+	const encodedParameters = encodeParameters(ABIParams, [BigInt(input)])
+
+	const requestOptions = createRequestOptions({ to: address, data: hexFunction + bufferToHex(encodedParameters) })
+	const res = await fetch(RPCUrl, requestOptions)
+	const result = JSON.parse(await res.text())
+	if (!result || !result.result) return result
+
+	return result.result
+}
 
 export async function getName(address: string, RPCUrl?: string) {
 	const BASE_URL = RPCUrl ?? 'https://api.roninchain.com/rpc'
 
 	try {
-		const encodedParameters = encodeParameters(ABI.RNSReverseRegistrar_computedId.inputs, [BigInt(address)])
-		const data = bufferToHex(encodedParameters)
-		const final = '0xd472ad04' + data
+		const arg = await contractCall({
+			hexFunction: '0xd472ad04',
+			RPCUrl: BASE_URL,
+			input: address,
+			ABIParams: ABI.RNSReverseRegistrar_computedId.inputs,
+			address: ADDRESS.RNSReverseRegistrar,
+		})
+		if (!arg) throw new Error('response is undefined - calling RNS Unified')
 
-		const requestOptions = createRequestOptions({ to: ADDRESS.RNSReverseRegistrar, data: final })
-		const res = await fetch(BASE_URL, requestOptions)
-		const result = await res.text()
-		const arg = JSON.parse(result).result
+		const hexRNS = await contractCall({
+			hexFunction: '0x691f3431',
+			RPCUrl: BASE_URL,
+			input: arg,
+			ABIParams: ABI.publicResolver_name.inputs,
+			address: ADDRESS.publicResolver,
+		})
 
-		const encodedParameters2 = encodeParameters(ABI.publicResolver_name.inputs, [BigInt(arg)])
-		const data2 = bufferToHex(encodedParameters2)
-		const final2 = '0x691f3431' + data2
-
-		const requestOptions2 = createRequestOptions({ to: ADDRESS.publicResolver, data: final2 })
-		const res2 = await fetch(BASE_URL, requestOptions2)
-		const result2 = await res2.text()
-		const hexRNS = JSON.parse(result2).result?.slice(2)
-
-    if(!hexRNS) return hexRNS
-		return hexToASCII(hexRNS)
+		if (!hexRNS) return hexRNS
+		return hexToASCII(hexRNS.slice(2))
 	} catch (error) {
 		console.error(error)
 	}
 }
 
-export async function getAddr(rns: string, RPCUrl?: string){
+export async function getAddr(rns: string, RPCUrl?: string) {
 	const BASE_URL = RPCUrl ?? 'https://api.roninchain.com/rpc'
 
-  try{
-    const encodedParameters = encodeParameters(ABI.RNSUnified_namehash.inputs, [rns])
-    const data = bufferToHex(encodedParameters)
-    const final = '0x09879962' + data
-    
-    const requestOptions = createRequestOptions({ to: ADDRESS.RNSUnified, data: final })
-    const res = await fetch(BASE_URL, requestOptions)
-    const result = await res.text()
-    const arg = JSON.parse(result)?.result
-    if(!arg) throw new Error('response is undefined - calling RNS Unified')
-    
-    const encodedParameters2 = encodeParameters(ABI.publicResolver_addr.inputs, [BigInt(arg)])
-    const data2 = bufferToHex(encodedParameters2)
-    const final2 = '0x3b3b57de' + data2
-  
-    const requestOptions2 = createRequestOptions({ to: ADDRESS.publicResolver, data: final2 })
-    const res2 = await fetch(BASE_URL, requestOptions2)
-    const result2 = await res2.text()
-    const address = JSON.parse(result2)?.result
-  
-    if(!address) return address
-    const decodedAddress = decodeParameters([{ internalType: "address payable", name: "", type: "address" }], hexToUint8Array(address))
-    return "0x" + decodedAddress
-  } catch (error) {
+	try {
+		const arg = await contractCall({
+			hexFunction: '0x09879962',
+			RPCUrl: BASE_URL,
+			input: rns,
+			ABIParams: ABI.RNSUnified_namehash.inputs,
+			address: ADDRESS.RNSUnified,
+		})
+		if (!arg) throw new Error('response is undefined - calling RNS Unified')
+
+		const address = await contractCall({
+			hexFunction: '0x3b3b57de',
+			RPCUrl: BASE_URL,
+			input: arg,
+			ABIParams: ABI.publicResolver_addr.inputs,
+			address: ADDRESS.publicResolver,
+		})
+
+		if (!address) return address
+		const decodedAddress = decodeParameters([{ internalType: 'address payable', name: '', type: 'address' }], hexToUint8Array(address))
+		return '0x' + decodedAddress
+	} catch (error) {
 		console.error(error)
 	}
 }
 
-export function initRNS(RPCUrl: string){
-  return {
-    getName: (address: string)=>getName(address, RPCUrl),
-    getAddr: (RNS: string)=>getAddr(RNS, RPCUrl)
-  }
+export function initRNS(RPCUrl: string) {
+	return {
+		getName: (address: string) => getName(address, RPCUrl),
+		getAddr: (RNS: string) => getAddr(RNS, RPCUrl),
+	}
 }
