@@ -1,6 +1,6 @@
 {
   "name": "@roninbuilders/rns",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Small package to interact with RNS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
