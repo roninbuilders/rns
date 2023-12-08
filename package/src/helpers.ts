@@ -40,23 +40,39 @@ export function bufferToHex(buffer: Uint8Array) {
 }
 
 export const ABI = {
-	RNSReverseRegistrar: {
+	RNSReverseRegistrar_computedId: {
 		inputs: [{ internalType: 'address', name: 'addr', type: 'address' }],
 		name: 'computeId',
 		outputs: [{ internalType: 'uint256', name: 'id', type: 'uint256' }],
 		stateMutability: 'pure',
 		type: 'function',
 	},
-	publicResolver: {
+	publicResolver_name: {
 		inputs: [{ internalType: 'bytes32', name: 'node', type: 'bytes32' }],
 		name: 'name',
 		outputs: [{ internalType: 'string', name: '', type: 'string' }],
 		stateMutability: 'view',
 		type: 'function',
 	},
+  publicResolver_addr: {
+    inputs: [{ internalType: "bytes32", name: "node", type: "bytes32" }],
+    name: "addr",
+    outputs: [{ internalType: "address payable", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  RNSUnified_namehash: {
+    inputs: [{ internalType: "string", name: "str", type: "string" }],
+    name: "namehash",
+    outputs: [{ internalType: "bytes32", name: "hashed", type: "bytes32" }],
+    stateMutability: "pure",
+    type: "function",
+  }
 }
 
 export const ADDRESS = {
 	RNSReverseRegistrar: '0xb8618a73cc08d2c4097d5c0e0f32fa4af4547e2f',
 	publicResolver: '0xadb077d236d9e81fb24b96ae9cb8089ab9942d48',
+	RNSUnified: '0x67c409dab0ee741a1b1be874bd1333234cfdbf44',
 }
+
