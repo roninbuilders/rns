@@ -1,13 +1,13 @@
 const { getName, getAddr } = require('./package/dist/index.cjs')
 
-const jihozAddress = 'ronin:a09a9b6f90ab23fcdcd6c3d087c1dfb65dddfb05'
+const address = 'ronin:a09a9b6f90ab23fcdcd6c3d087c1dfb65dddfb05'
 
 async function init(){
-  const rns = await getName(jihozAddress)
+  const rns = await getName(address)
   isEqual('jihoz.ron', rns)
 
-  const address = await getAddr(rns)
-  isEqual(checkAddress(jihozAddress), address)
+  const addr = await getAddr(rns)
+  isEqual(checkAddress(address), addr)
 }
 
 init()

@@ -83,5 +83,38 @@ export function initRNS(RPCUrl: string) {
 	return {
 		getName: (address: string) => getName(address, RPCUrl),
 		getAddr: (RNS: string) => getAddr(RNS, RPCUrl),
+		getBalance: (address: string) => getBalance(address, RPCUrl)
+	}
+}
+
+export async function getBalance(address: string, RPCUrl?: string, decimals: number = 2){
+	const BASE_URL = RPCUrl ?? 'https://api.roninchain.com/rpc'
+  let _address = address
+  if(address.includes('ronin:')) _address = '0x' + address.slice(6)
+
+	try{
+		const myHeaders = new Headers()
+		myHeaders.append('Content-Type', 'application/json')
+		
+		const payload = JSON.stringify({
+			jsonrpc: "2.0",
+			id: 0,
+			method: "eth_getBalance",
+			params: [_address,"latest"]
+		})
+	
+		const res = await fetch(BASE_URL, {
+			method: 'POST',
+			headers: myHeaders,
+			body: payload,
+			redirect: 'follow',
+		})
+	
+		const hexRes = JSON.parse(await res.text())?.result
+		const balance = BigInt(hexRes) / BigInt(10**(18 - decimals))
+	
+		return Number(balance) / 10**decimals
+	} catch (error) {
+		console.error(error)
 	}
 }

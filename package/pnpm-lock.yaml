@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@zoltu/ethereum-abi-encoder':
-    specifier: ^5.0.4
+    specifier: 5.0.4
     version: 5.0.4
   typescript:
     specifier: '>=5'
