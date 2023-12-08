@@ -68,7 +68,7 @@ export async function getAddr(rns: string, RPCUrl?: string) {
 		})
 
 		if (!address) return address
-		const decodedAddress = decodeParameters([{ internalType: 'address payable', name: '', type: 'address' }], hexToUint8Array(address))
+		const decodedAddress = decodeParameters(ABI.publicResolver_addr.outputs, hexToUint8Array(address))
 		return '0x' + decodedAddress
 	} catch (error) {
 		console.error(error)
