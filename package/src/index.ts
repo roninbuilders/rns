@@ -1,5 +1,5 @@
-import { encodeParameters } from '@zoltu/ethereum-abi-encoder'
-import { ABI, ADDRESS, bufferToHex, createRequestOptions, hexToASCII } from './helpers'
+import { decodeParameters, encodeParameters } from '@zoltu/ethereum-abi-encoder'
+import { ABI, ADDRESS, bufferToHex, createRequestOptions, hexToASCII, hexToUint8Array } from './helpers'
 
 export async function getName(address: string, RPCUrl?: string) {
 	const BASE_URL = RPCUrl ?? 'https://api.roninchain.com/rpc'
@@ -54,7 +54,8 @@ export async function getAddr(rns: string, RPCUrl?: string){
     const address = JSON.parse(result2)?.result
   
     if(!address) return address
-    return "0x" + address.slice(26)
+    const decodedAddress = decodeParameters([{ internalType: "address payable", name: "", type: "address" }], hexToUint8Array(address))
+    return "0x" + decodedAddress
   } catch (error) {
 		console.error(error)
 	}

@@ -39,6 +39,21 @@ export function bufferToHex(buffer: Uint8Array) {
     .join('')
 }
 
+export function hexToUint8Array(hex: string){
+  const match = /^(?:0x)?([a-fA-F0-9]*)$/.exec(hex)
+  if(!match) throw new Error('Error while converting hex to Uint8Array - match is undefined')
+  const normalized = match[1]
+  if(!normalized) throw new Error('Error while converting hex to Uint8Array - normalized is undefined')
+  const bytes = []
+  for (let i = 0; i < normalized.length; i += 2) {
+    bytes.push(Number.parseInt(`${normalized[i]}${normalized[i + 1]}`, 16))
+  }
+  const result = new Uint8Array(bytes.length)
+  result.set(bytes, 0)
+
+  return result
+}
+
 export const ABI = {
 	RNSReverseRegistrar_computedId: {
 		inputs: [{ internalType: 'address', name: 'addr', type: 'address' }],
