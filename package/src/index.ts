@@ -1,4 +1,4 @@
-import { ParameterDescription, decodeParameters, encodeParameters } from '@zoltu/ethereum-abi-encoder'
+import { type ParameterDescription, decodeParameters, encodeParameters } from '@zoltu/ethereum-abi-encoder'
 import { ABI, ADDRESS, bufferToHex, createRequestOptions, hexToASCII, hexToUint8Array } from './helpers'
 
 async function contractCall({
