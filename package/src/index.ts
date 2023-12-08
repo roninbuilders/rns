@@ -1,4 +1,4 @@
-import { type ParameterDescription, decodeParameters, encodeParameters } from '@zoltu/ethereum-abi-encoder'
+import { type ParameterDescription, decodeParameters, encodeParameters, type Encodable } from '@zoltu/ethereum-abi-encoder'
 import { ABI, ADDRESS, bufferToHex, createRequestOptions, hexToASCII, hexToUint8Array } from './helpers'
 
 async function contractCall({
@@ -7,8 +7,8 @@ async function contractCall({
 	input,
 	ABIParams,
 	address,
-}: { hexFunction: string; RPCUrl: string; input: string; ABIParams: ParameterDescription[]; address: string }) {
-	const encodedParameters = encodeParameters(ABIParams, [BigInt(input)])
+}: { hexFunction: string; RPCUrl: string; input: Encodable; ABIParams: ParameterDescription[]; address: string }) {
+	const encodedParameters = encodeParameters(ABIParams, [input])
 
 	const requestOptions = createRequestOptions({ to: address, data: hexFunction + bufferToHex(encodedParameters) })
 	const res = await fetch(RPCUrl, requestOptions)
@@ -21,11 +21,14 @@ async function contractCall({
 export async function getName(address: string, RPCUrl?: string) {
 	const BASE_URL = RPCUrl ?? 'https://api.roninchain.com/rpc'
 
+  let _address = address
+  if(address.includes('ronin:')) _address = '0x' + address.slice(6)
+
 	try {
 		const arg = await contractCall({
 			hexFunction: '0xd472ad04',
 			RPCUrl: BASE_URL,
-			input: address,
+			input: BigInt(_address),
 			ABIParams: ABI.RNSReverseRegistrar_computedId.inputs,
 			address: ADDRESS.RNSReverseRegistrar,
 		})
@@ -34,13 +37,13 @@ export async function getName(address: string, RPCUrl?: string) {
 		const hexRNS = await contractCall({
 			hexFunction: '0x691f3431',
 			RPCUrl: BASE_URL,
-			input: arg,
+			input: BigInt(arg),
 			ABIParams: ABI.publicResolver_name.inputs,
 			address: ADDRESS.publicResolver,
 		})
 
 		if (!hexRNS) return hexRNS
-		return hexToASCII(hexRNS.slice(2))
+		return hexToASCII(hexRNS)
 	} catch (error) {
 		console.error(error)
 	}
@@ -62,14 +65,15 @@ export async function getAddr(rns: string, RPCUrl?: string) {
 		const address = await contractCall({
 			hexFunction: '0x3b3b57de',
 			RPCUrl: BASE_URL,
-			input: arg,
+			input: BigInt(arg),
 			ABIParams: ABI.publicResolver_addr.inputs,
 			address: ADDRESS.publicResolver,
 		})
-
+    
 		if (!address) return address
 		const decodedAddress = decodeParameters(ABI.publicResolver_addr.outputs, hexToUint8Array(address))
-		return '0x' + decodedAddress
+
+		return '0x' + (decodedAddress.result)?.toString(16)
 	} catch (error) {
 		console.error(error)
 	}

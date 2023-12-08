@@ -30,7 +30,7 @@ export function hexToASCII(value: string) {
 		const v = parseInt(value.substring(i, i + 2), 16)
 		if (v) str += String.fromCharCode(v)
 	}
-	return str
+	return str.slice(2)
 }
 
 export function bufferToHex(buffer: Uint8Array) {
