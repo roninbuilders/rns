@@ -13,7 +13,7 @@ async function contractCall({
 	const requestOptions = createRequestOptions({ to: address, data: hexFunction + bufferToHex(encodedParameters) })
 	const res = await fetch(RPCUrl, requestOptions)
 	const result = JSON.parse(await res.text())
-	if (!result || !result.result) return result
+	if (!result || !result.result) return null
 
 	return result.result
 }
